@@ -44,7 +44,7 @@
 	
 	.rectangle {
 		width: 750px;
-		height: 500px;
+		height: 550px;
 	}
 	
 	.galleryImg {
@@ -100,57 +100,26 @@
 
     <div class="container">
 
-        <div class="row">
-            <div class="box">
-                <div class="col-lg-12">
-                    <hr>
-                    <h2 class="intro-text text-center"><strong>Photos From An Africa Trip</strong></h2>
-                    <hr>
-                </div>
-                <div>
-                    <p>A couple of years ago my girlfriend and I visited Tanzania and Kenya.<br/>Click on a marker to view the photos from the corresponding place.</p>
-				</div>
-				<center><div id="map" style="width: 1080px; height: 700px"></div></center>
-				
-                <div>
-                    <br/>
-					<p>This map was implemented using the <a href="http://leafletjs.com/">Leaflet library</a></p> 
-					<p>A big chunk of the JavaScript code used here was taken from / inspired by <a href="https://neiugis.github.io/lab1/">NEIU Interactive Cartography tutorials.</a></p> 
-				</div>
-                <!-- <div class="clearfix"></div> -->
-            </div>
-        </div>
-
-        <!--
-		<div class="row">
-            <div class="box">
-                <div class="col-lg-12">
-                    <hr>
-                    <h2 class="intro-text text-center"><strong>Project 2</strong></h2>
-                    <hr>
-                </div>
-                <div class="col-md-6">
-                    <p>Lorem ipsum, blah blah...</p> 
-				</div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-		
-        <div class="row">
-            <div class="box">
-                <div class="col-lg-12">
-                    <hr>
-                    <h2 class="intro-text text-center"><strong>Project 3</strong></h2>
-                    <hr>
-                </div>
-                <div class="col-md-6">
-                    <p>Lorem ipsum, blah blah...</p> 
-				</div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-		-->
-    <!-- /.container -->
+	<div class="row">
+		<div class="box">
+			<div class="col-lg-12">
+				<hr>
+				<h2 class="intro-text text-center"><strong>Photos From An Africa Trip</strong></h2>
+				<hr>
+			</div>
+			<div>
+				<p>A couple of years ago my girlfriend and I visited Tanzania and Kenya.<br/>Click on a marker to view the photos from the corresponding place.</p>
+			</div>
+			<center><div id="map" style="width: 1080px; height: 700px"></div></center>
+			
+			<div>
+				<br/>
+				<p>This map was implemented using the <a href="http://leafletjs.com/">Leaflet library</a></p> 
+				<p>A big chunk of the JavaScript code used here was taken from / inspired by <a href="https://neiugis.github.io/lab1/">NEIU Interactive Cartography tutorials.</a></p> 
+			</div>
+			<!-- <div class="clearfix"></div> -->
+		</div>
+	</div>
 
     <footer>
         <div class="container">
@@ -469,14 +438,12 @@
 		var targetLL = [-4.1181044, 38];
 		var map = L.map('map').setView(targetLL, zoomLevel);
 		
-		console.log("Hello 1");
-		
 		/*L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		   attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 		   maxZoom: 4,
 		   minZoom: 4
 		}).addTo(map);*/
-		
+
 		L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		//L.tileLayer('http://tile.stamen.com/terrain/{z}/{x}/{y}.png', {
 		   //attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href=
@@ -518,6 +485,7 @@
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextDES();return false;"> \
 						<center> \
+						<h3>Dar Es Salaam</h3> \
 						<img id="galleryImage" src="' + nextDES() + '" class="galleryImg" height="500px"/></a> \
 						</center> \
 						</div>';
@@ -534,6 +502,7 @@
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextStoneCity();return false;"> \
 						<center> \
+						<h3>Stone Town</h3> \
 						<img id="galleryImage" src="' + nextStoneCity() + '"class="galleryImg" height="500px"/></a> \
 						</center> \
 						</div>';
@@ -549,6 +518,7 @@
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextPrisonIsland();return false;"> \
 						<center> \
+						<h3>Changuu Island</h3> \
 						<img id="galleryImage" src="' + nextPrisonIsland() + '"class="galleryImg" height="500px"/></a> \
 						</center> \
 						</div>';
@@ -562,6 +532,7 @@
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextJozani();return false;"> \
 						<center> \
+						<h3>Jozani Forest</h3> \
 						<img id="galleryImage" src="' + nextJozani() + '"class="galleryImg" height="500px"/></a> \
 						</center> \
 						</div>';
@@ -575,6 +546,7 @@
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextArusha();return false;"> \
 						<center> \
+						<h3>Arusha</h3> \
 						<img id="galleryImage" src="' + nextArusha() + '"class="galleryImg" height="500px"/></a> \
 						</center> \
 						</div>';
@@ -589,6 +561,7 @@
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextLake();return false;"> \
 						<center> \
+						<h3>Lake Manyara</h3> \
 						<img id="galleryImage" src="' + nextLake() + '"class="galleryImg" height="500px"/></a> \
 						</center> \
 						</div>';
@@ -602,6 +575,7 @@
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextNgoroNgoro();return false;"> \
 						<center> \
+						<h3>Ngorongoro</h3> \
 						<img id="galleryImage" src="' + nextNgoroNgoro() + '"class="galleryImg" height="500px"/></a> \
 						</center> \
 						</div>';
@@ -615,6 +589,7 @@
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextSerengeti();return false;"> \
 						<center> \
+						<h3>Serengeti</h3> \
 						<img id="galleryImage" src="' + nextSerengeti() + '"class="galleryImg" height="500px"/></a> \
 						</center> \
 						</div>';
@@ -628,6 +603,7 @@
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextMtoWaMbu();return false;"> \
 						<center> \
+						<h3>Mto Wa Mbu</h3> \
 						<img id="galleryImage" src="' + nextMtoWaMbu() + '"class="galleryImg" height="500px"/></a> \
 						</center> \
 						</div>';
@@ -641,6 +617,7 @@
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextNairobi();return false;"> \
 						<center> \
+						<h3>Nairobi</h3> \
 						<img id="galleryImage" src="' + nextNairobi() + '"class="galleryImg" height="500px"/></a> \
 						</center> \
 						</div>';
