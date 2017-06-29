@@ -59,7 +59,7 @@
                         <a href="about.html">About Marko</a>
                     </li>
                     <li>
-                        <a href="analysis.html">GIS Analysis</a>
+                        <a href="photo_gallery.html">Photo Gallery</a>
                     </li>
                     <li>
                         <a href="visualization.html">Visualization</a>
@@ -76,6 +76,7 @@
 
     <div class="container">
 
+		<!--
 		<div class="row">
             <div class="box">
                 <div class="col-lg-12">
@@ -91,18 +92,134 @@
                 <div class="clearfix"></div>
             </div>
         </div>
-		
+		-->
+
 		<div class="row">
             <div class="box">
                 <div class="col-lg-12">
                     <hr>
                     <h2 class="intro-text text-center">
-					    <strong>Coding proj 2</strong>
+					    <strong>Airline Route Data Processor</strong>
                     </h2>
                     <hr>
                 </div>
-                <div class="col-md-6">
-					Paste some code here...
+				<div>
+				This is the Python script that I used to extract unique airline routes that include (or don't include) ORD airport in a visualization project.<br/>
+				The processed data comes from <a href="https://openflights.org">Open Flights</a>.<br/><br/>
+				</div>
+                <div class="col-md-12">
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">csv</span>
+<span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">sys</span>
+
+
+<span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">AirportInfo</span>():
+	<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">__init__</span>(<span style="color: #007020">self</span>, tableId, longName, normalName, code, x, y):
+		<span style="color: #007020">self</span><span style="color: #333333">.</span>tableId <span style="color: #333333">=</span> tableId
+		<span style="color: #007020">self</span><span style="color: #333333">.</span>longName <span style="color: #333333">=</span> longName
+		<span style="color: #007020">self</span><span style="color: #333333">.</span>normalName <span style="color: #333333">=</span> normalName
+		<span style="color: #007020">self</span><span style="color: #333333">.</span>code <span style="color: #333333">=</span> code
+		<span style="color: #007020">self</span><span style="color: #333333">.</span>x <span style="color: #333333">=</span> x
+		<span style="color: #007020">self</span><span style="color: #333333">.</span>y <span style="color: #333333">=</span> y
+
+airports <span style="color: #333333">=</span> {}
+
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">loadAirports</span>():
+	inputFile <span style="color: #333333">=</span> <span style="color: #007020">open</span>(<span style="background-color: #fff0f0">r&quot;E:\NEIU\GES393\QGIS_Project\airports.dat&quot;</span>, <span style="background-color: #fff0f0">&#39;rt&#39;</span>, encoding<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;utf8&quot;</span>)
+	<span style="color: #008800; font-weight: bold">try</span>:
+		reader <span style="color: #333333">=</span> csv<span style="color: #333333">.</span>reader(inputFile)
+
+		<span style="color: #008800; font-weight: bold">for</span> row <span style="color: #000000; font-weight: bold">in</span> reader:
+			tableId <span style="color: #333333">=</span> row[<span style="color: #0000DD; font-weight: bold">0</span>]
+			airportLongName <span style="color: #333333">=</span> row[<span style="color: #0000DD; font-weight: bold">1</span>]
+			airportNormalName <span style="color: #333333">=</span> row[<span style="color: #0000DD; font-weight: bold">2</span>]
+
+			airportCode <span style="color: #333333">=</span> row[<span style="color: #0000DD; font-weight: bold">4</span>]
+			y <span style="color: #333333">=</span> row[<span style="color: #0000DD; font-weight: bold">6</span>]
+			x <span style="color: #333333">=</span> row[<span style="color: #0000DD; font-weight: bold">7</span>]
+
+			airportInfo <span style="color: #333333">=</span> AirportInfo(tableId, airportLongName, airportNormalName, airportCode, x, y)
+			airports[tableId] <span style="color: #333333">=</span> airportInfo
+
+			<span style="color: #008800; font-weight: bold">print</span>(airportCode)
+	<span style="color: #008800; font-weight: bold">finally</span>:
+		inputFile<span style="color: #333333">.</span>close()
+
+
+outputRows <span style="color: #333333">=</span> []
+nonOrdFlights <span style="color: #333333">=</span> []
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">loadRoutes</span>():
+	inputFile <span style="color: #333333">=</span> <span style="color: #007020">open</span>(<span style="background-color: #fff0f0">r&quot;E:\NEIU\GES393\QGIS_Project\routes.dat&quot;</span>, <span style="background-color: #fff0f0">&#39;rt&#39;</span>, encoding<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;utf8&quot;</span>)
+	uniqueDestintionsFromORD <span style="color: #333333">=</span> <span style="color: #007020">set</span>()
+	uniqueFlightsNonOrd<span style="color: #333333">=</span> <span style="color: #007020">set</span>()
+
+	<span style="color: #008800; font-weight: bold">try</span>:
+		reader <span style="color: #333333">=</span> csv<span style="color: #333333">.</span>reader(inputFile)
+
+		<span style="color: #008800; font-weight: bold">for</span> row <span style="color: #000000; font-weight: bold">in</span> reader:
+			fromCode <span style="color: #333333">=</span> row[<span style="color: #0000DD; font-weight: bold">2</span>]
+			fromTableId <span style="color: #333333">=</span> row[<span style="color: #0000DD; font-weight: bold">3</span>]
+			toCode <span style="color: #333333">=</span> row[<span style="color: #0000DD; font-weight: bold">4</span>]
+			toTableId <span style="color: #333333">=</span> row[<span style="color: #0000DD; font-weight: bold">5</span>]
+			fromAirport <span style="color: #333333">=</span> airports<span style="color: #333333">.</span>get(fromTableId, <span style="color: #007020">None</span>)
+			toAirport <span style="color: #333333">=</span> airports<span style="color: #333333">.</span>get(toTableId, <span style="color: #007020">None</span>)
+
+			<span style="color: #008800; font-weight: bold">if</span> (fromAirport <span style="color: #000000; font-weight: bold">is</span> <span style="color: #000000; font-weight: bold">not</span> <span style="color: #007020">None</span>) <span style="color: #000000; font-weight: bold">and</span> (toAirport <span style="color: #000000; font-weight: bold">is</span> <span style="color: #000000; font-weight: bold">not</span> <span style="color: #007020">None</span>):
+				<span style="color: #008800; font-weight: bold">if</span> fromCode <span style="color: #333333">==</span> <span style="background-color: #fff0f0">&quot;ORD&quot;</span>:
+					<span style="color: #008800; font-weight: bold">if</span> toCode <span style="color: #000000; font-weight: bold">not</span> <span style="color: #000000; font-weight: bold">in</span> uniqueDestintionsFromORD:
+						uniqueDestintionsFromORD<span style="color: #333333">.</span>add(toCode)
+
+						<span style="color: #888888"># Example string: Manaus, ORD, MAO,&quot;LINESTRING(-87.9073 41.9742, -60.0463 -3.0358)&quot;</span>
+						outputRows<span style="color: #333333">.</span>append(<span style="background-color: #fff0f0">&quot;{label}, {origCode}, {destCode},</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;</span><span style="background-color: #fff0f0">LINESTRING({origX} {origY}, {destX} {destY})</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;\n</span><span style="background-color: #fff0f0">&quot;</span><span style="color: #333333">.</span>format(
+							label<span style="color: #333333">=</span>toAirport<span style="color: #333333">.</span>normalName,
+							origCode<span style="color: #333333">=</span>fromCode,
+							destCode<span style="color: #333333">=</span>toCode,
+							origX<span style="color: #333333">=</span>fromAirport<span style="color: #333333">.</span>x,
+							origY<span style="color: #333333">=</span>fromAirport<span style="color: #333333">.</span>y,
+							destX<span style="color: #333333">=</span>toAirport<span style="color: #333333">.</span>x,
+							destY<span style="color: #333333">=</span>toAirport<span style="color: #333333">.</span>y
+						))
+				<span style="color: #008800; font-weight: bold">elif</span> toCode <span style="color: #333333">!=</span> <span style="background-color: #fff0f0">&quot;ORD&quot;</span>:
+
+					key1 <span style="color: #333333">=</span> (toCode, fromCode)
+					key2 <span style="color: #333333">=</span> (fromCode, toCode)
+					<span style="color: #008800; font-weight: bold">if</span>(key1 <span style="color: #000000; font-weight: bold">not</span> <span style="color: #000000; font-weight: bold">in</span> uniqueFlightsNonOrd) <span style="color: #000000; font-weight: bold">and</span> (key2 <span style="color: #000000; font-weight: bold">not</span> <span style="color: #000000; font-weight: bold">in</span> uniqueFlightsNonOrd):
+						uniqueFlightsNonOrd<span style="color: #333333">.</span>add(key1)
+
+						nonOrdFlights<span style="color: #333333">.</span>append(<span style="background-color: #fff0f0">&quot;{label}, {origCode}, {destCode},</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;</span><span style="background-color: #fff0f0">LINESTRING({origX} {origY}, {destX} {destY})</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&quot;\n</span><span style="background-color: #fff0f0">&quot;</span><span style="color: #333333">.</span>format(
+							label<span style="color: #333333">=</span>toAirport<span style="color: #333333">.</span>normalName,
+							origCode<span style="color: #333333">=</span>fromCode,
+							destCode<span style="color: #333333">=</span>toCode,
+							origX<span style="color: #333333">=</span>fromAirport<span style="color: #333333">.</span>x,
+							origY<span style="color: #333333">=</span>fromAirport<span style="color: #333333">.</span>y,
+							destX<span style="color: #333333">=</span>toAirport<span style="color: #333333">.</span>x,
+							destY<span style="color: #333333">=</span>toAirport<span style="color: #333333">.</span>y
+						))
+
+				<span style="color: #888888">#print(airportCode)</span>
+	<span style="color: #008800; font-weight: bold">finally</span>:
+		inputFile<span style="color: #333333">.</span>close()
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">outputRouteGeometry</span>(stringList, <span style="color: #007020">file</span>):
+	myFile <span style="color: #333333">=</span> <span style="color: #007020">open</span>(<span style="color: #007020">file</span>, <span style="background-color: #fff0f0">&quot;w&quot;</span>)
+	<span style="color: #008800; font-weight: bold">for</span> line <span style="color: #000000; font-weight: bold">in</span> stringList:
+		myFile<span style="color: #333333">.</span>write(line)
+	myFile<span style="color: #333333">.</span>close()
+
+
+loadAirports()
+loadRoutes()
+outputRouteGeometry(outputRows, <span style="background-color: #fff0f0">r&quot;E:\NEIU\GES393\QGIS_Project\lineGeometry-unique2.csv&quot;</span>)
+outputRouteGeometry(nonOrdFlights, <span style="background-color: #fff0f0">r&quot;E:\NEIU\GES393\QGIS_Project\lineGeometry-nonORD.csv&quot;</span>)
+</pre></div>
+
+	<div>
+		<br/>
+		Python syntax highlighting done using <a href="http://hilite.me/">http://hilite.me/</a>.
+	</div>
+				
 
 					<!--
 					<p>This is a great place to introduce your company or project and describe what you do.</p>
@@ -144,8 +261,7 @@
         </div> -->
 
     </div>
-    <!-- /.container -->
-
+	
     <footer>
         <div class="container">
             <div class="row">

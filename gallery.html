@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Kenyzania</title>
+        <link rel="stylesheet" href="leaflet/leaflet.css" />
+		<script src="leaflet/leaflet.js"></script>
+		<style type="text/css">
+		body{
+			margin:0px;
+			background:#000;
+		}
+		
+		.my-label {
+			position: absolute;
+			width:1000px;
+			font-size:20px;
+		}
+		
+		.rectangle {
+			width: 750px;
+			height: 500px;
+		}
+		
+		.galleryImg {
+			margin: auto;
+		}
+		</style>
+    </head>
+
+    <body>
+		<div id="map" style="width: 1080px; height: 700px"></div>
+		
+		
+		<script type="text/javascript">
+
+
+
+			var imageIndex = 0;
+
+		
+			function nextDES()
+			{
+				var images = new Array(); 
+				images[0]="./img/gallery/01_DES/PC220049.jpg";
+				images[1]="./img/gallery/01_DES/PC220023.jpg";
+				images[2]="./img/gallery/01_DES/PC220036.jpg";
+				images[3]="./img/gallery/01_DES/PC220044.jpg";
+
+				try {
+					imageIndex = (imageIndex+1) % images.length;
+					document.getElementById("galleryImage").src = images[imageIndex];
+				} catch(err) {}
+		
+				return images[0];
+				
+			}
+			
+			function nextStoneCity()
+			{
+				var images = new Array(); 
+				var folder = "./img/gallery/02_StoneCity/";
+				images.push(folder + "PC240307.jpg");
+				images.push(folder + "PC230285.jpg");
+				images.push(folder + "PC240313.jpg");
+				images.push(folder + "PC240326.jpg");
+				images.push(folder + "DSCF4736.jpg");
+				images.push(folder + "PC260309.jpg");
+				images.push(folder + "PC240338.jpg");
+				images.push(folder + "PC260316.jpg");
+				
+				try {
+					imageIndex = (imageIndex+1) % images.length;
+					document.getElementById("galleryImage").src = images[imageIndex];
+				} catch(err) {}
+				
+				return images[0];
+			}
+			
+			function nextPrisonIsland()
+			{
+				var images = new Array(); 
+				var folder = "./img/gallery/03_PrisonIsland/";
+				images.push(folder + "PC230139.jpg");
+				images.push(folder + "PC230172.jpg");
+				images.push(folder + "PC230182.jpg");
+				images.push(folder + "PC230244.jpg");
+				images.push(folder + "PC230263.jpg");
+				images.push(folder + "PC230193.jpg");
+				images.push(folder + "PC230270.jpg");
+				
+				try {
+					imageIndex = (imageIndex+1) % images.length;
+					document.getElementById("galleryImage").src = images[imageIndex];
+				} catch(err) {}
+				
+				return images[0];
+			}
+			
+			
+			function nextJozani()
+			{
+				var images = new Array(); 
+				var folder = "./img/gallery/04_Jozani/";
+				images.push(folder + "DSCF4839.jpg");
+				images.push(folder + "PC250040.jpg");
+				images.push(folder + "PC250078.jpg");
+				images.push(folder + "PC250095.jpg");
+				images.push(folder + "PC250107.jpg");
+				images.push(folder + "PC250126.jpg");
+				images.push(folder + "PC250128.jpg");
+				images.push(folder + "PC250168.jpg");
+				images.push(folder + "PC250188.jpg");
+				images.push(folder + "PC250223.jpg");
+				images.push(folder + "PC250230.jpg");
+				images.push(folder + "PC250232.jpg");
+				
+				try {
+					imageIndex = (imageIndex+1) % images.length;
+					document.getElementById("galleryImage").src = images[imageIndex];
+				} catch(err) {}
+				
+				return images[0];
+			}
+			
+			function nextArusha()
+			{
+				var images = new Array(); 
+				var folder = "./img/gallery/05_Arusha/";
+				images.push(folder + "PC270018.jpg");
+				images.push(folder + "PC270369.jpg");
+				images.push(folder + "PC280041.jpg");
+				images.push(folder + "PC280048.jpg");
+				images.push(folder + "PC280056.jpg");
+				
+				try {
+					imageIndex = (imageIndex+1) % images.length;
+					document.getElementById("galleryImage").src = images[imageIndex];
+				} catch(err) {}
+				
+				return images[0];
+			}
+			
+			function nextLake()
+			{
+				var images = new Array(); 
+				var folder = "./img/gallery/06_Lake/";
+
+				images.push(folder + "DSCF5051.jpg");
+				images.push(folder + "DSCF5056.jpg");
+				images.push(folder + "DSCF5057.jpg");
+				images.push(folder + "PC280083.jpg");
+				images.push(folder + "PC280105.jpg");
+				images.push(folder + "PC280189.jpg");
+				images.push(folder + "PC280198.jpg");
+				images.push(folder + "PC280221.jpg");
+				images.push(folder + "PC280231.jpg");
+				images.push(folder + "PC280232.jpg");
+				images.push(folder + "PC280253.jpg");
+				images.push(folder + "PC280264.jpg");
+				images.push(folder + "PC280281.jpg");
+				images.push(folder + "PC280319.jpg");
+				images.push(folder + "PC280332.jpg");
+				images.push(folder + "PC280337.jpg");
+				images.push(folder + "PC280351.jpg");
+				images.push(folder + "PC280367.jpg");
+				images.push(folder + "PC280381.jpg");
+
+				try {
+					imageIndex = (imageIndex+1) % images.length;
+					document.getElementById("galleryImage").src = images[imageIndex];
+				} catch(err) {}
+				
+				return images[0];
+			}
+
+			function nextNgoroNgoro()
+			{
+				var images = new Array(); 
+				var folder = "./img/gallery/07_NgoroNgoro/";
+
+				images.push(folder + "CraterCrater.jpg");
+				images.push(folder + "DSCF5149.jpg");
+				images.push(folder + "PC290018.jpg");
+				images.push(folder + "PC290021.jpg");
+				images.push(folder + "PC290031.jpg");
+				images.push(folder + "PC290067.jpg");
+				images.push(folder + "PC290106.jpg");
+				images.push(folder + "PC290119.jpg");
+				images.push(folder + "PC290130.jpg");
+				images.push(folder + "PC290148.jpg");
+				images.push(folder + "PC290155.jpg");
+				images.push(folder + "PC290170.jpg");
+				images.push(folder + "PC290173.jpg");
+				images.push(folder + "PC290176.jpg");
+				images.push(folder + "PC290178.jpg");
+				images.push(folder + "PC290185.jpg");
+				images.push(folder + "PC290231.jpg");
+				images.push(folder + "PC290233.jpg");
+				images.push(folder + "PC290291.jpg");
+				images.push(folder + "PC290306.jpg");
+				images.push(folder + "PC300016.jpg");
+				
+				try {
+					imageIndex = (imageIndex+1) % images.length;
+					document.getElementById("galleryImage").src = images[imageIndex];
+				} catch(err) {}
+				
+				return images[0];
+			}
+			
+			function nextSerengeti()
+			{
+				var images = new Array(); 
+				var folder = "./img/gallery/08_Serengeti/";
+
+				images.push(folder + "PC300059.jpg");
+				images.push(folder + "PC300060.jpg");
+				images.push(folder + "PC300073.jpg");
+				images.push(folder + "PC300074.jpg");
+				images.push(folder + "PC300104.jpg");
+				images.push(folder + "PC300125.jpg");
+				images.push(folder + "PC300129.jpg");
+				images.push(folder + "PC300132.jpg");
+				images.push(folder + "PC300133.jpg");
+				images.push(folder + "PC300168.jpg");
+				images.push(folder + "PC300169.jpg");
+				images.push(folder + "PC300170.jpg");
+				images.push(folder + "PC300182.jpg");
+				images.push(folder + "PC300186.jpg");
+				images.push(folder + "PC300204.jpg");
+				images.push(folder + "PC300206.jpg");
+				images.push(folder + "PC300212.jpg");
+				images.push(folder + "PC300218.jpg");
+				images.push(folder + "PC300222.jpg");
+				images.push(folder + "PC300224.jpg");
+				images.push(folder + "PC300242.jpg");
+				images.push(folder + "PC300251.jpg");
+				images.push(folder + "PC300274.jpg");
+				images.push(folder + "PC300279.jpg");
+				images.push(folder + "PC310303.jpg");
+				images.push(folder + "PC310309.jpg");
+				images.push(folder + "PC310315.jpg");
+				images.push(folder + "PC310329.jpg");
+				images.push(folder + "PC310333.jpg");
+				images.push(folder + "PC310350.jpg");
+				images.push(folder + "PC310360.jpg");
+				images.push(folder + "PC310366.jpg");
+				images.push(folder + "PC310369.jpg");
+				images.push(folder + "PC310380.jpg");
+				images.push(folder + "PC310387.jpg");
+				images.push(folder + "DSCF5332.jpg");
+				images.push(folder + "DSCF5343.jpg");
+				images.push(folder + "DSCF5558.jpg");
+				images.push(folder + "DSCF5587.jpg");
+				images.push(folder + "DSCF5602.jpg");
+				
+				try {
+					imageIndex = (imageIndex+1) % images.length;
+					document.getElementById("galleryImage").src = images[imageIndex];
+				} catch(err) {}
+				
+				return images[0];
+			}
+			
+			function nextMtoWaMbu()
+			{
+				var images = new Array(); 
+				var folder = "./img/gallery/09_MtoWaMbu/";
+
+				images.push(folder + "PC310409.jpg");
+				images.push(folder + "PC310415.jpg");
+				images.push(folder + "PC310424.jpg");
+				images.push(folder + "PC310431.jpg");
+				images.push(folder + "PC310442.jpg");
+				images.push(folder + "PC310444.jpg");
+				images.push(folder + "PC310457.jpg");
+				images.push(folder + "PC310461.jpg");
+				images.push(folder + "PC310463.jpg");
+				images.push(folder + "PC310467.jpg");
+				images.push(folder + "PC310470.jpg");
+				images.push(folder + "PC310481.jpg");
+				images.push(folder + "PC310486.jpg");
+				
+				try {
+					imageIndex = (imageIndex+1) % images.length;
+					document.getElementById("galleryImage").src = images[imageIndex];
+				} catch(err) {}
+				
+				return images[0];
+			}
+			
+			function nextNairobi()
+			{
+				var images = new Array(); 
+				var folder = "./img/gallery/10_Nairobi/";
+
+				images.push(folder + "P1010489.jpg");
+				images.push(folder + "P1010490.jpg");
+				images.push(folder + "P1020010.jpg");
+				images.push(folder + "P1020498.jpg");
+				images.push(folder + "P1020500.jpg");
+				images.push(folder + "P1020506.jpg");
+				images.push(folder + "P1020519.jpg");
+				images.push(folder + "P1020526.jpg");
+				images.push(folder + "P1020532.jpg");
+				images.push(folder + "P1020538.jpg");
+				images.push(folder + "P1020539.jpg");
+				images.push(folder + "P1020547.jpg");
+				images.push(folder + "P1020553.jpg");
+				images.push(folder + "P1020554.jpg");
+				images.push(folder + "P1020562.jpg");
+				images.push(folder + "P1030014.jpg");
+				images.push(folder + "P1030016.jpg");
+				images.push(folder + "P1030029.jpg");
+				images.push(folder + "P1030037.jpg");
+				images.push(folder + "P1030055.jpg");
+				images.push(folder + "P1030071.jpg");
+				images.push(folder + "DSCF5760.jpg");
+				images.push(folder + "P1030091.jpg");
+				images.push(folder + "P1030103.jpg");
+				images.push(folder + "P1030105.jpg");
+				images.push(folder + "P1030106.jpg");
+				images.push(folder + "P1030107.jpg");
+				
+				try {
+					imageIndex = (imageIndex+1) % images.length;
+					document.getElementById("galleryImage").src = images[imageIndex];
+				} catch(err) {}
+				
+				return images[0];
+			}
+		</script>
+		
+		<script type="text/javascript">
+		    var zoomLevel = 7; //-4.1181044,36.5674606
+			var targetLL = [-4.1181044, 38];
+			var map = L.map('map').setView(targetLL, zoomLevel);
+			
+			console.log("Hello 1");
+			
+			/*L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+               attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+               maxZoom: 4,
+               minZoom: 4
+            }).addTo(map);*/
+			
+			L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			//L.tileLayer('http://tile.stamen.com/terrain/{z}/{x}/{y}.png', {
+               //attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href=
+			   attribution: '<a href="http://www.openstreetmap.org/copyright">ODbL</a> contributors',
+               maxZoom: 12,
+			   minZoom: 3
+            }).addTo(map);
+			
+			
+		
+			////////////////////////////////////
+			// create custom icon
+			var firefoxIcon = L.icon({
+				iconUrl: 'http://joshuafrazier.info/images/firefox.svg',
+				iconSize: [38, 95], // size of the icon
+				popupAnchor: [0,-15]
+				});
+
+			// create popup contents
+			// var customPopup = "Mozilla Toronto Offices<br/><img src='http://joshuafrazier.info/images/maptime.gif' alt='maptime logo gif' width='350px'/>";
+
+		
+			// specify popup options 
+			var customOptions =
+			{
+				'maxWidth': '2000',
+				//'width': auto,
+				'className' : 'custom'
+			}
+				
+			////////////////////////////////////
+			// DES: -6.7924, 39.2083
+			//var markDES = L.marker([-6.7924, 39.2083], {icon: firefoxIcon}).addTo(map);
+			var marker2 = L.marker([30.4670648,-84.3969412]).addTo(map);
+			
+			
+			/////////////////////////////////////////////
+			// Dar Es Salaam
+			var popupContent = '<div class="rectangle"> \
+							<a href="#" onclick="nextDES();return false;"> \
+							<center> \
+							<img id="galleryImage" src="' + nextDES() + '" class="galleryImg" height="500px"/></a> \
+							</center> \
+							</div>';
+
+			//var markDES = L.marker([-6.7924, 39.2083], {icon: firefoxIcon}).addTo(map);
+			var markDES = L.marker([-6.7924, 39.2083]).addTo(map);
+			markDES.bindPopup(popupContent, customOptions);
+
+			///////////////////////////////////
+			// Stone Town
+			var markStoneCity = L.marker([-6.1622, 39.1921]).addTo(map);
+			//markStoneCity.bindTooltip("My Label", {permanent: true, className: "my-label", offset: [0, 0] });
+			//markStoneCity.addTo(map);
+			var popupContent = '<div class="rectangle"> \
+							<a href="#" onclick="nextStoneCity();return false;"> \
+							<center> \
+							<img id="galleryImage" src="' + nextStoneCity() + '"class="galleryImg" height="500px"/></a> \
+							</center> \
+							</div>';
+
+			console.log("popupContent=" + popupContent);
+			markStoneCity.bindPopup(popupContent, customOptions);
+
+			///////////////////////////////////
+			// Prison Island
+			var markPrisonIsland = L.marker([-6.1522, 39.12921]).addTo(map);
+			//markStoneCity.bindTooltip("My Label", {permanent: true, className: "my-label", offset: [0, 0] });
+			//markStoneCity.addTo(map);
+			var popupContent = '<div class="rectangle"> \
+							<a href="#" onclick="nextPrisonIsland();return false;"> \
+							<center> \
+							<img id="galleryImage" src="' + nextPrisonIsland() + '"class="galleryImg" height="500px"/></a> \
+							</center> \
+							</div>';
+
+			console.log("popupContent=" + popupContent);
+			markPrisonIsland.bindPopup(popupContent, customOptions);
+			
+			///////////////////////////////////
+			// Jozani
+			var markJozani = L.marker([-6.2415572,39.4117616]).addTo(map);
+			var popupContent = '<div class="rectangle"> \
+							<a href="#" onclick="nextJozani();return false;"> \
+							<center> \
+							<img id="galleryImage" src="' + nextJozani() + '"class="galleryImg" height="500px"/></a> \
+							</center> \
+							</div>';
+
+			console.log("popupContent=" + popupContent);
+			markJozani.bindPopup(popupContent, customOptions);
+			
+			///////////////////////////////////
+			// Arusha, -3.3981412,36.6071717
+			var markArusha = L.marker([-3.3981412,36.6071717]).addTo(map);
+			var popupContent = '<div class="rectangle"> \
+							<a href="#" onclick="nextArusha();return false;"> \
+							<center> \
+							<img id="galleryImage" src="' + nextArusha() + '"class="galleryImg" height="500px"/></a> \
+							</center> \
+							</div>';
+
+			console.log("popupContent=" + popupContent);
+			markArusha.bindPopup(popupContent, customOptions);
+
+
+			///////////////////////////////////
+			// lake manyara, -3.5898355,35.5326624
+			var mark = L.marker([-3.5898355,35.5326624]).addTo(map);
+			var popupContent = '<div class="rectangle"> \
+							<a href="#" onclick="nextLake();return false;"> \
+							<center> \
+							<img id="galleryImage" src="' + nextLake() + '"class="galleryImg" height="500px"/></a> \
+							</center> \
+							</div>';
+
+			console.log("popupContent=" + popupContent);
+			mark.bindPopup(popupContent, customOptions);
+			
+			///////////////////////////////////
+			// NgoroNgoro, -2.9753131,35.448246
+			var mark = L.marker([-2.9753131,35.448246]).addTo(map);
+			var popupContent = '<div class="rectangle"> \
+							<a href="#" onclick="nextNgoroNgoro();return false;"> \
+							<center> \
+							<img id="galleryImage" src="' + nextNgoroNgoro() + '"class="galleryImg" height="500px"/></a> \
+							</center> \
+							</div>';
+
+			console.log("popupContent=" + popupContent);
+			mark.bindPopup(popupContent, customOptions);
+
+			///////////////////////////////////
+			// Serengeti, -2.3333333,34.8311446
+			var mark = L.marker([-2.3333333,34.8311446]).addTo(map);
+			var popupContent = '<div class="rectangle"> \
+							<a href="#" onclick="nextSerengeti();return false;"> \
+							<center> \
+							<img id="galleryImage" src="' + nextSerengeti() + '"class="galleryImg" height="500px"/></a> \
+							</center> \
+							</div>';
+
+			console.log("popupContent=" + popupContent);
+			mark.bindPopup(popupContent, customOptions);
+			
+			///////////////////////////////////
+			// Mto Wa Mbu, -3.3751406,35.8486033
+			var mark = L.marker([-3.3751406,35.8486033]).addTo(map);
+			var popupContent = '<div class="rectangle"> \
+							<a href="#" onclick="nextMtoWaMbu();return false;"> \
+							<center> \
+							<img id="galleryImage" src="' + nextMtoWaMbu() + '"class="galleryImg" height="500px"/></a> \
+							</center> \
+							</div>';
+
+			console.log("popupContent=" + popupContent);
+			mark.bindPopup(popupContent, customOptions);
+			
+			///////////////////////////////////
+			// Nairobi, -1.3047997,36.7073079
+			var mark = L.marker([-1.3047997,36.7073079]).addTo(map);
+			var popupContent = '<div class="rectangle"> \
+							<a href="#" onclick="nextNairobi();return false;"> \
+							<center> \
+							<img id="galleryImage" src="' + nextNairobi() + '"class="galleryImg" height="500px"/></a> \
+							</center> \
+							</div>';
+
+			console.log("popupContent=" + popupContent);
+			mark.bindPopup(popupContent, customOptions);
+
+		</script>
+   </body>
+</html>
