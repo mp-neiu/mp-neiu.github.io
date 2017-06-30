@@ -50,6 +50,13 @@
 	.galleryImg {
 		margin: auto;
 	}
+	
+	.labelClass{
+		white-space:nowrap;
+		text-shadow: 0 0 0.1em black, 0 0 0.1em black,
+        0 0 0.1em black,0 0 0.1em black,0 0 0.1em;
+		color: yellow
+	}
 	</style>
 
 </head>
@@ -228,8 +235,8 @@
 		{
 			var images = new Array(); 
 			var folder = "./img/gallery/05_Arusha/";
-			images.push(folder + "PC270018.jpg");
 			images.push(folder + "PC270369.jpg");
+			images.push(folder + "PC270018.jpg");
 			images.push(folder + "PC280041.jpg");
 			images.push(folder + "PC280048.jpg");
 			images.push(folder + "PC280056.jpg");
@@ -247,7 +254,6 @@
 			var images = new Array(); 
 			var folder = "./img/gallery/06_Lake/";
 
-			images.push(folder + "DSCF5051.jpg");
 			images.push(folder + "DSCF5056.jpg");
 			images.push(folder + "DSCF5057.jpg");
 			images.push(folder + "PC280083.jpg");
@@ -266,6 +272,7 @@
 			images.push(folder + "PC280351.jpg");
 			images.push(folder + "PC280367.jpg");
 			images.push(folder + "PC280381.jpg");
+			images.push(folder + "DSCF5051.jpg");
 
 			try {
 				imageIndex = (imageIndex+1) % images.length;
@@ -353,8 +360,6 @@
 			images.push(folder + "DSCF5332.jpg");
 			images.push(folder + "DSCF5343.jpg");
 			images.push(folder + "DSCF5558.jpg");
-			images.push(folder + "DSCF5587.jpg");
-			images.push(folder + "DSCF5602.jpg");
 			
 			try {
 				imageIndex = (imageIndex+1) % images.length;
@@ -369,9 +374,9 @@
 			var images = new Array(); 
 			var folder = "./img/gallery/09_MtoWaMbu/";
 
+			images.push(folder + "PC310424.jpg");
 			images.push(folder + "PC310409.jpg");
 			images.push(folder + "PC310415.jpg");
-			images.push(folder + "PC310424.jpg");
 			images.push(folder + "PC310431.jpg");
 			images.push(folder + "PC310442.jpg");
 			images.push(folder + "PC310444.jpg");
@@ -382,6 +387,8 @@
 			images.push(folder + "PC310470.jpg");
 			images.push(folder + "PC310481.jpg");
 			images.push(folder + "PC310486.jpg");
+			images.push(folder + "DSCF5587.jpg");
+			images.push(folder + "DSCF5602.jpg");
 			
 			try {
 				imageIndex = (imageIndex+1) % images.length;
@@ -473,15 +480,9 @@
 			//'width': auto,
 			'className' : 'custom'
 		}
-			
-		////////////////////////////////////
-		// DES: -6.7924, 39.2083
-		//var markDES = L.marker([-6.7924, 39.2083], {icon: firefoxIcon}).addTo(map);
-		var marker2 = L.marker([30.4670648,-84.3969412]).addTo(map);
-		
-		
+
 		/////////////////////////////////////////////
-		// Dar Es Salaam
+		// Dar Es Salaam, -6.7924, 39.2083
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextDES();return false;"> \
 						<center> \
@@ -490,13 +491,17 @@
 						</center> \
 						</div>';
 
+		//var divIcon = L.divIcon({className: "labelClass", html: "Dar Es Salaam"})
+
 		//var markDES = L.marker([-6.7924, 39.2083], {icon: firefoxIcon}).addTo(map);
 		var markDES = L.marker([-6.7924, 39.2083]).addTo(map);
+		var label = L.marker([-6.7924, 39.2083], {icon: L.divIcon({className: "labelClass", html: "01. Dar Es Salaam"})}).addTo(map);
 		markDES.bindPopup(popupContent, customOptions);
 
 		///////////////////////////////////
 		// Stone Town
 		var markStoneCity = L.marker([-6.1622, 39.1921]).addTo(map);
+		var label = L.marker([-6.1622, 39.1921], {icon: L.divIcon({className: "labelClass", html: "02. Stone Town"})}).addTo(map);
 		//markStoneCity.bindTooltip("My Label", {permanent: true, className: "my-label", offset: [0, 0] });
 		//markStoneCity.addTo(map);
 		var popupContent = '<div class="rectangle"> \
@@ -513,6 +518,7 @@
 		///////////////////////////////////
 		// Prison Island
 		var markPrisonIsland = L.marker([-6.1522, 39.12921]).addTo(map);
+		var label = L.marker([-6.1522, 39.12921], {icon: L.divIcon({className: "labelClass", html: "03. Changuu Island"})}).addTo(map);
 		//markStoneCity.bindTooltip("My Label", {permanent: true, className: "my-label", offset: [0, 0] });
 		//markStoneCity.addTo(map);
 		var popupContent = '<div class="rectangle"> \
@@ -528,7 +534,9 @@
 		
 		///////////////////////////////////
 		// Jozani
-		var markJozani = L.marker([-6.2415572,39.4117616]).addTo(map);
+		var coord = [-6.2415572,39.4117616];
+		var markJozani = L.marker(coord).addTo(map);
+		var label = L.marker(coord, {icon: L.divIcon({className: "labelClass", html: "04. Jozani Forest"})}).addTo(map);
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextJozani();return false;"> \
 						<center> \
@@ -542,7 +550,9 @@
 		
 		///////////////////////////////////
 		// Arusha, -3.3981412,36.6071717
-		var markArusha = L.marker([-3.3981412,36.6071717]).addTo(map);
+		var coord = [-3.3981412,36.6071717];
+		var markArusha = L.marker(coord).addTo(map);
+		var label = L.marker(coord, {icon: L.divIcon({className: "labelClass", html: "05. Arusha"})}).addTo(map);
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextArusha();return false;"> \
 						<center> \
@@ -557,7 +567,9 @@
 
 		///////////////////////////////////
 		// lake manyara, -3.5898355,35.5326624
-		var mark = L.marker([-3.5898355,35.5326624]).addTo(map);
+		var coord = [-3.5898355,35.5326624];
+		var mark = L.marker(coord).addTo(map);
+		var label = L.marker(coord, {icon: L.divIcon({className: "labelClass", html: "06. Lake Manyara"})}).addTo(map);
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextLake();return false;"> \
 						<center> \
@@ -571,7 +583,9 @@
 		
 		///////////////////////////////////
 		// NgoroNgoro, -2.9753131,35.448246
-		var mark = L.marker([-2.9753131,35.448246]).addTo(map);
+		var coord = [-2.9753131,35.448246];
+		var mark = L.marker(coord).addTo(map);
+		var label = L.marker(coord, {icon: L.divIcon({className: "labelClass", html: "07. Ngorongoro"})}).addTo(map);
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextNgoroNgoro();return false;"> \
 						<center> \
@@ -585,7 +599,9 @@
 
 		///////////////////////////////////
 		// Serengeti, -2.3333333,34.8311446
-		var mark = L.marker([-2.3333333,34.8311446]).addTo(map);
+		var coord = [-2.3333333,34.8311446];
+		var mark = L.marker(coord).addTo(map);
+		var label = L.marker(coord, {icon: L.divIcon({className: "labelClass", html: "08. Serengeti"})}).addTo(map);
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextSerengeti();return false;"> \
 						<center> \
@@ -599,7 +615,9 @@
 		
 		///////////////////////////////////
 		// Mto Wa Mbu, -3.3751406,35.8486033
-		var mark = L.marker([-3.3751406,35.8486033]).addTo(map);
+		var coord = [-3.3751406,35.8486033];
+		var label = L.marker(coord, {icon: L.divIcon({className: "labelClass", html: "09. Mto Wa Mbu"})}).addTo(map);
+		var mark = L.marker(coord).addTo(map);
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextMtoWaMbu();return false;"> \
 						<center> \
@@ -613,7 +631,9 @@
 		
 		///////////////////////////////////
 		// Nairobi, -1.3047997,36.7073079
-		var mark = L.marker([-1.3047997,36.7073079]).addTo(map);
+		var coord = [-1.3047997,36.7073079];
+		var mark = L.marker(coord).addTo(map);
+		var label = L.marker(coord, {icon: L.divIcon({className: "labelClass", html: "10. Nairobi"})}).addTo(map);
 		var popupContent = '<div class="rectangle"> \
 						<a href="#" onclick="nextNairobi();return false;"> \
 						<center> \
