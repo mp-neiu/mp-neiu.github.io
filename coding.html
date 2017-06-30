@@ -112,6 +112,188 @@
 			</div>
 		</div>
 		
+		
+		<div class="row">
+            <div class="box">
+                <div class="col-lg-12">
+                    <hr>
+                    <h2 class="intro-text text-center">
+					    <strong>ArcPy Vector and Raster Clipper</strong>
+                    </h2>
+                    <hr>
+                </div>
+				<div>
+				This is the ArcPy (Python) script that can be run from ArcMap to do the following:<br/><br/>
+					&nbsp;&nbsp;&nbsp;1.&nbsp;&nbsp;&nbsp;Set projections of all feature classes and rasters to the same user-definable coordinate system<br/>
+					&nbsp;&nbsp;&nbsp;2.&nbsp;&nbsp;&nbsp;Clip all projected shapefiles using a user-definable clipping feature<br/>
+					&nbsp;&nbsp;&nbsp;3.&nbsp;&nbsp;&nbsp;Clip all projected rasters using the same user-definable clipping feature<br/>
+					&nbsp;&nbsp;&nbsp;4.&nbsp;&nbsp;&nbsp;Create a file geodatabase with a user-definable name to store all the preprocessed shapefiles<br/><br/><br/>
+				</div>
+                <div class="col-md-12">
+				
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">
+<span style="color: #888888"># ----------------------------------------------------------------------------------------------------------------</span>
+<span style="color: #888888"># Name:        GIS3_VectorAndRasterClipper_by_Marko.py</span>
+<span style="color: #888888">#</span>
+<span style="color: #888888"># Author:      Marko Petrovic</span>
+<span style="color: #888888"># ----------------------------------------------------------------------------------------------------------------</span>
+
+<span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">os</span>
+<span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">arcpy</span>
+
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">getBaseShapefileName</span>(fileNameWithExtensionAndOrPath):
+    <span style="color: #DD4422">&quot;&quot;&quot;Extract the base file name (i.e. extension-less and path-less) from a shape file&quot;&quot;&quot;</span>
+    <span style="color: #008800; font-weight: bold">return</span> fileNameWithExtensionAndOrPath<span style="color: #333333">.</span>split(os<span style="color: #333333">.</span>sep)[<span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">1</span>]<span style="color: #333333">.</span>rstrip(<span style="background-color: #fff0f0">&quot;.shp&quot;</span>)
+
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">removeExtension</span>(fileNameWithExtension):
+    <span style="color: #DD4422">&quot;&quot;&quot;Remove the extension (last extension if there is more than 1) from a file name&quot;&quot;&quot;</span>
+    <span style="color: #008800; font-weight: bold">return</span> os<span style="color: #333333">.</span>path<span style="color: #333333">.</span>splitext(fileNameWithExtension)[<span style="color: #0000DD; font-weight: bold">0</span>]
+
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">isSpatialReferenceKnown</span>(feature):
+    <span style="color: #DD4422">&quot;&quot;&quot;Return false if the spatial reference is undefined&quot;&quot;&quot;</span>
+    desc <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>Describe(feature)
+    spatialReference <span style="color: #333333">=</span> desc<span style="color: #333333">.</span>spatialReference
+    <span style="color: #008800; font-weight: bold">if</span> spatialReference <span style="color: #333333">==</span> <span style="background-color: #fff0f0">&quot;&quot;</span> <span style="color: #000000; font-weight: bold">or</span> spatialReference <span style="color: #000000; font-weight: bold">is</span> <span style="color: #007020">None</span>:
+        <span style="color: #008800; font-weight: bold">return</span> <span style="color: #007020">False</span>
+    <span style="color: #008800; font-weight: bold">return</span> <span style="color: #007020">True</span>
+
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">getSpatialReference</span>(feature):
+    <span style="color: #DD4422">&quot;&quot;&quot;Get geospatial reference&quot;&quot;&quot;</span>
+    desc <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>Describe(feature)
+    <span style="color: #008800; font-weight: bold">return</span> desc<span style="color: #333333">.</span>spatialReference
+
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">getExtents</span>(featureClass):
+    <span style="color: #DD4422">&quot;&quot;&quot;Get the extents rectangle (also known as &#39;Envelope&#39;) from the given feature class&quot;&quot;&quot;</span>
+    desc <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>Describe(featureClass)
+    <span style="color: #008800; font-weight: bold">return</span> <span style="background-color: #fff0f0">&quot;{xMin} {xMax} {yMin} {yMax}&quot;</span><span style="color: #333333">.</span>format(xMin<span style="color: #333333">=</span>desc<span style="color: #333333">.</span>extent<span style="color: #333333">.</span>XMin,
+                                                xMax<span style="color: #333333">=</span>desc<span style="color: #333333">.</span>extent<span style="color: #333333">.</span>XMax,
+                                                yMin<span style="color: #333333">=</span>desc<span style="color: #333333">.</span>extent<span style="color: #333333">.</span>YMin,
+                                                yMax<span style="color: #333333">=</span>desc<span style="color: #333333">.</span>extent<span style="color: #333333">.</span>YMax)
+
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">projectAndClipFeatureClasses</span>(coordinateSystem, originalClippingFeature, projectedClippingFeature, geodatabaseName):
+    <span style="color: #DD4422">&quot;&quot;&quot;Convert and clip all shapefiles in the workspace&quot;&quot;&quot;</span>
+    fcList <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>ListFeatureClasses()
+
+    <span style="color: #008800; font-weight: bold">if</span> <span style="color: #007020">len</span>(fcList) <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">0</span>:
+        arcpy<span style="color: #333333">.</span>AddWarning(<span style="background-color: #fff0f0">&quot;There&#39;s nothing to convert! Exiting.&quot;</span>)
+        <span style="color: #008800; font-weight: bold">return</span>
+
+    arcpy<span style="color: #333333">.</span>AddMessage(<span style="background-color: #fff0f0">&quot;{n} feature classes found...&quot;</span><span style="color: #333333">.</span>format(n<span style="color: #333333">=</span><span style="color: #007020">len</span>(fcList)))
+
+    <span style="color: #008800; font-weight: bold">for</span> featureClass <span style="color: #000000; font-weight: bold">in</span> fcList:
+
+        featureClassPath <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>env<span style="color: #333333">.</span>workspace <span style="color: #333333">+</span> os<span style="color: #333333">.</span>sep <span style="color: #333333">+</span> featureClass
+
+        <span style="color: #008800; font-weight: bold">if</span> featureClassPath <span style="color: #333333">==</span> originalClippingFeature:
+            arcpy<span style="color: #333333">.</span>AddMessage(<span style="background-color: #fff0f0">&quot;Clipping feature {name} will not get clipped.&quot;</span><span style="color: #333333">.</span>format(name<span style="color: #333333">=</span>featureClass))
+        <span style="color: #008800; font-weight: bold">else</span>:
+
+            <span style="color: #008800; font-weight: bold">if</span> <span style="color: #000000; font-weight: bold">not</span> isSpatialReferenceKnown(featureClass):
+                <span style="color: #888888"># Define Projection will overwrite the coordinate system information.</span>
+                <span style="color: #888888"># We don&#39;t want to do this, because we can&#39;t assume we know the correct projection.</span>
+                arcpy<span style="color: #333333">.</span>AddWarning(<span style="background-color: #fff0f0">&quot;Feature class {name} has no projection information! Skipping...&quot;</span><span style="color: #333333">.</span>format(name<span style="color: #333333">=</span>featureClass))
+            <span style="color: #008800; font-weight: bold">else</span>:
+                <span style="color: #888888"># All preconditions are true</span>
+                arcpy<span style="color: #333333">.</span>AddMessage(<span style="background-color: #fff0f0">&quot;Converting {name} from {ref}&quot;</span><span style="color: #333333">.</span>format(name<span style="color: #333333">=</span>featureClass,
+                                                                       ref<span style="color: #333333">=</span>getSpatialReference(featureClass)<span style="color: #333333">.</span>Name))
+
+                <span style="color: #888888"># Only used to store the intermediate value</span>
+                tempClass <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>env<span style="color: #333333">.</span>workspace <span style="color: #333333">+</span> os<span style="color: #333333">.</span>sep <span style="color: #333333">+</span> geodatabaseName <span style="color: #333333">+</span> os<span style="color: #333333">.</span>sep <span style="color: #333333">+</span> <span style="background-color: #fff0f0">&quot;temp&quot;</span>
+
+                <span style="color: #888888"># Project from one coordinate system to another</span>
+                outFeatureClass <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>env<span style="color: #333333">.</span>workspace <span style="color: #333333">+</span> os<span style="color: #333333">.</span>sep <span style="color: #333333">+</span> geodatabaseName <span style="color: #333333">+</span> os<span style="color: #333333">.</span>sep <span style="color: #333333">+</span> featureClass<span style="color: #333333">.</span>rstrip(<span style="background-color: #fff0f0">&quot;.shp&quot;</span>)
+
+                arcpy<span style="color: #333333">.</span>Project_management(featureClass, tempClass, coordinateSystem) <span style="color: #888888"># transform_method</span>
+                arcpy<span style="color: #333333">.</span>Clip_analysis(tempClass, projectedClippingFeature, outFeatureClass)
+                arcpy<span style="color: #333333">.</span>Delete_management(tempClass)
+
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">projectAndClipRasters</span>(coordinateSystem, projectedClippingFeature, geodatabaseName, resamplingType):
+    <span style="color: #DD4422">&quot;&quot;&quot;Project and clip all rasters in the workspace&quot;&quot;&quot;</span>
+    rasterList <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>ListRasters()
+
+    arcpy<span style="color: #333333">.</span>AddMessage(<span style="background-color: #fff0f0">&quot;{n} raster files found...&quot;</span><span style="color: #333333">.</span>format(n<span style="color: #333333">=</span><span style="color: #007020">len</span>(rasterList)))
+
+    <span style="color: #888888"># raster clip function takes a rectangle (aka &#39;envelope&#39;) instead of a feature class</span>
+    clippingRectangle <span style="color: #333333">=</span> getExtents(projectedClippingFeature)
+
+    <span style="color: #008800; font-weight: bold">for</span> raster <span style="color: #000000; font-weight: bold">in</span> rasterList:
+        <span style="color: #008800; font-weight: bold">if</span> <span style="color: #000000; font-weight: bold">not</span> isSpatialReferenceKnown(raster):
+            arcpy<span style="color: #333333">.</span>AddWarning(
+                <span style="background-color: #fff0f0">&quot;Feature class {name} has no projection information! Skipping...&quot;</span><span style="color: #333333">.</span>format(name<span style="color: #333333">=</span>raster))
+        <span style="color: #008800; font-weight: bold">else</span>:
+            arcpy<span style="color: #333333">.</span>AddMessage(<span style="background-color: #fff0f0">&quot;Converting raster {name}...&quot;</span><span style="color: #333333">.</span>format(name<span style="color: #333333">=</span>raster))
+
+            <span style="color: #888888"># tempRaster is only used to store the intermediate value</span>
+            tempRaster <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>env<span style="color: #333333">.</span>workspace <span style="color: #333333">+</span> os<span style="color: #333333">.</span>sep <span style="color: #333333">+</span> geodatabaseName <span style="color: #333333">+</span> os<span style="color: #333333">.</span>sep <span style="color: #333333">+</span> <span style="background-color: #fff0f0">&quot;tempRaster&quot;</span>
+            outRaster <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>env<span style="color: #333333">.</span>workspace <span style="color: #333333">+</span> os<span style="color: #333333">.</span>sep <span style="color: #333333">+</span> geodatabaseName <span style="color: #333333">+</span> os<span style="color: #333333">.</span>sep <span style="color: #333333">+</span> removeExtension(raster)
+
+            arcpy<span style="color: #333333">.</span>ProjectRaster_management(raster, tempRaster, coordinateSystem, resamplingType)
+            arcpy<span style="color: #333333">.</span>Clip_management(tempRaster, clippingRectangle, outRaster)
+
+            <span style="color: #888888"># delete tempRaster</span>
+            arcpy<span style="color: #333333">.</span>Delete_management(tempRaster)
+
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">main</span>():
+    <span style="color: #DD4422">&quot;&quot;&quot;Script&#39;s entry point&quot;&quot;&quot;</span>
+    <span style="color: #888888"># Get user arguments</span>
+    arcpy<span style="color: #333333">.</span>env<span style="color: #333333">.</span>workspace <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>GetParameterAsText(<span style="color: #0000DD; font-weight: bold">0</span>)   <span style="color: #888888">#</span>
+    coordinateSystem <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>GetParameterAsText(<span style="color: #0000DD; font-weight: bold">1</span>)      <span style="color: #888888">#</span>
+    clippingFeature <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>GetParameterAsText(<span style="color: #0000DD; font-weight: bold">2</span>)       <span style="color: #888888">#</span>
+    geodatabaseName <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>GetParameterAsText(<span style="color: #0000DD; font-weight: bold">3</span>)       <span style="color: #888888"># just the name, without path</span>
+    resamplingType <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>GetParameterAsText(<span style="color: #0000DD; font-weight: bold">4</span>)        <span style="color: #888888"># default to &quot;CUBIC&quot;</span>
+
+    arcpy<span style="color: #333333">.</span>AddMessage(<span style="background-color: #fff0f0">&quot;Clipping class = {n}.&quot;</span><span style="color: #333333">.</span>format(n<span style="color: #333333">=</span>clippingFeature))
+
+    <span style="color: #008800; font-weight: bold">if</span> <span style="color: #000000; font-weight: bold">not</span> isSpatialReferenceKnown(clippingFeature):
+        arcpy<span style="color: #333333">.</span>AddError(<span style="background-color: #fff0f0">&quot;Clipping feature&#39;s projection is not known!&quot;</span>)
+        <span style="color: #008800; font-weight: bold">return</span>
+
+    <span style="color: #888888"># Create the geodatabase</span>
+    arcpy<span style="color: #333333">.</span>CreateFileGDB_management(arcpy<span style="color: #333333">.</span>env<span style="color: #333333">.</span>workspace, geodatabaseName)
+
+    <span style="color: #888888"># Convert the clipping feature to correct coordinate system</span>
+    outClippingFeature <span style="color: #333333">=</span> arcpy<span style="color: #333333">.</span>env<span style="color: #333333">.</span>workspace <span style="color: #333333">+</span> os<span style="color: #333333">.</span>sep <span style="color: #333333">+</span> geodatabaseName <span style="color: #333333">+</span> os<span style="color: #333333">.</span>sep <span style="color: #333333">+</span> getBaseShapefileName(clippingFeature)
+
+    arcpy<span style="color: #333333">.</span>AddMessage(<span style="background-color: #fff0f0">&quot;Projecting clipping feature to {name}&quot;</span><span style="color: #333333">.</span>format(name<span style="color: #333333">=</span>outClippingFeature))
+    arcpy<span style="color: #333333">.</span>Project_management(clippingFeature, outClippingFeature, coordinateSystem)
+
+    projectAndClipFeatureClasses(coordinateSystem<span style="color: #333333">=</span>coordinateSystem,
+                                 originalClippingFeature<span style="color: #333333">=</span>clippingFeature,
+                                 projectedClippingFeature<span style="color: #333333">=</span>outClippingFeature,
+                                 geodatabaseName<span style="color: #333333">=</span>geodatabaseName)
+
+    projectAndClipRasters(coordinateSystem<span style="color: #333333">=</span>coordinateSystem,
+                          projectedClippingFeature<span style="color: #333333">=</span>outClippingFeature,
+                          geodatabaseName<span style="color: #333333">=</span>geodatabaseName,
+                          resamplingType<span style="color: #333333">=</span>resamplingType)
+
+    arcpy<span style="color: #333333">.</span>AddMessage(<span style="background-color: #fff0f0">&quot;Done!&quot;</span>)
+
+
+
+<span style="color: #008800; font-weight: bold">if</span> __name__ <span style="color: #333333">==</span> <span style="background-color: #fff0f0">&quot;__main__&quot;</span>:
+    main()
+</pre></div>
+
+				
+				</div>
+			</div>
+		</div>
+
+				
+				
+				
+				
+				
+		
 		<div class="row">
             <div class="box">
                 <div class="col-lg-12">
@@ -234,8 +416,8 @@ outputRouteGeometry(nonOrdFlights, <span style="background-color: #fff0f0">r&quo
 </pre></div>
 
 	<div>
-		<br/>
-		Python syntax highlighting done using <a href="http://hilite.me/">http://hilite.me/</a>.
+		<br/><br/><br/>
+		<div align="right">Python syntax highlighting done using <a href="http://hilite.me/">http://hilite.me/</a>.</div>
 	</div>
 				
 
